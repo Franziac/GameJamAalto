@@ -2,7 +2,7 @@ title OS1 PuzzleScript tehtävä
 author OS1 Dev Team
 homepage aalto.fi
 
-realtime_interval 1
+realtime_interval 0.3
 
 ========
 OBJECTS
@@ -62,6 +62,26 @@ white
 Temp
 black
 
+tyhja
+black
+.....
+.....
+.....
+.....
+.....
+
+Temp2
+blue
+
+Temp3
+red
+
+Temp4
+pink
+
+temp5
+green
+
 
 
 
@@ -74,7 +94,8 @@ LEGEND
 =======
 (Aseta tässä lyhenteet luomillesi objekteille)
 
-. = Background
+- = Background
+. = tyhja
 (player määrittää liikuteltavan hahmon, voit määrittää useita käyttämällä "OR" merkintää)
 player = Masa
 @ = Masa
@@ -100,9 +121,9 @@ COLLISIONLAYERS
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 
 Background, 
-Object, Temp,
-Player, Crate,
-Sand, Crate
+Object, 
+Player, 
+Sand, Crate, Temp, tyhja, Temp2, Temp3, Temp4, temp5
 
 
 
@@ -121,12 +142,26 @@ RULES
 [> Crate Object] -> [> Crate > Object]
 [> Player  Object] -> [> Player > Object]
 
-late down[Sand | ] -> [|Temp]
+late down[Sand |tyhja ] -> [tyhja|Temp]
 late [Temp]->[Sand]
-late down[Sand | Sand] -> [Sand | Temp]
-late left[Temp|] -> [Sand|Sand]
-late right[|Temp] -> [Sand|Sand]
-late up[temp|] -> [Sand|Sand]
+late down[Sand | Sand] -> [tyhja | Temp2]
+late down[Temp4|Sand] -> [temp5|temp2]
+late [Sand|temp5|tyhja] -> [Sand|tyhja|tyhja]
+late [tyhja|temp5|Sand] -> [tyhja|tyhja|Sand]
+late [temp4]->[sand]
+late[Sand|Temp2|Sand] -> [Sand|Temp3|Sand]
+late up[Temp3|tyhja] -> [Sand|Sand]
+late [tyhja|Temp2|tyhja] -> [Temp4 | Sand | tyhja]
+late [Sand | Temp2 | tyhja] -> [Sand|Temp2|Temp4]
+late [tyhja|Temp2|Sand] -> [Temp4|Sand|Sand]
+late [Temp2|Temp2|tyhja] -> [Sand|Sand|Temp4]
+late [tyhja|Temp2|Temp2] -> [Temp4|Sand|Sand]
+late [Temp2] -> [Sand]
+
+
+
+
+late up[temp|tyhja] -> [Sand|Sand]
 
 
 
@@ -150,7 +185,7 @@ MESSAGE Sähkömies Markolla on nälkä, auta hänet persikan luo !
 ...b..m.p..
 ...........
 .......s...
-...c...s.@.
+...c.....@.
 ...........
 ...........
 .......s...
@@ -158,6 +193,12 @@ MESSAGE Sähkömies Markolla on nälkä, auta hänet persikan luo !
 ...........
 .......s...
 ...........
-.......C...
+.......s...
+...........
+.......s...
+...........
+.......s...
+...........
+...........
 
 MESSAGE Voitit pelin.
