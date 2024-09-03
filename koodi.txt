@@ -2,6 +2,8 @@ title OS1 PuzzleScript tehtävä
 author OS1 Dev Team
 homepage aalto.fi
 
+realtime_interval 1
+
 ========
 OBJECTS
 ========
@@ -49,6 +51,17 @@ white
 ..00.
 ..00.
 
+Sand
+white
+00000
+00000
+00000
+00000
+00000
+
+Temp
+black
+
 
 
 
@@ -69,6 +82,7 @@ p = Plant
 c = Crate
 b = Bread
 m = Milk
+s = Sand
 
 Object = Bread or Milk or Plant
 
@@ -85,9 +99,10 @@ COLLISIONLAYERS
 ================
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 
-Background,
-Object
-Player, Crate
+Background, 
+Object, Temp,
+Player, Crate,
+Sand, Crate
 
 
 
@@ -106,6 +121,16 @@ RULES
 [> Crate Object] -> [> Crate > Object]
 [> Player  Object] -> [> Player > Object]
 
+late down[Sand | ] -> [|Temp]
+late [Temp]->[Sand]
+late down[Sand | Sand] -> [Sand | Temp]
+late left[Temp|] -> [Sand|Sand]
+late right[|Temp] -> [Sand|Sand]
+late up[temp|] -> [Sand|Sand]
+
+
+
+
 (Markon haluaisi osata avata oven, jos hän "on avaimellinen")
 
 ==============
@@ -121,12 +146,18 @@ MESSAGE Sähkömies Markolla on nälkä, auta hänet persikan luo !
 
 (Sijoita alla olevaan karttaan luomasi objektit)
 
-...........
+.......s...
 ...b..m.p..
 ...........
+.......s...
+...c...s.@.
 ...........
-...c.....@.
 ...........
+.......s...
+...........
+...........
+.......s...
+...........
+.......C...
 
 MESSAGE Voitit pelin.
-
