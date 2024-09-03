@@ -117,7 +117,7 @@ WINCONDITIONS
 LEVELS
 =======
 
-MESSAGE Sähkömies Markolla on nälkä, auta hänet persikan luo!
+MESSAGE Sähkömies Markolla on nälkä, auta hänet persikan luo !
 
 (Sijoita alla olevaan karttaan luomasi objektit)
 
