@@ -27,8 +27,6 @@ red gray orange lightgray
 33333
 00000
 
-DynamiittiPelaaja
-black
 
 Sand
 white
@@ -42,12 +40,7 @@ Temp
 black
 
 Background
-darkbrown darkgrey black
-00000
-00000
-00000
-00000
-00000
+darkbrown
 
 
 Rock1
@@ -66,12 +59,24 @@ lightbrown lightgray white
 11100
 01000
 
+TopCheck
+black
 
+Air 
+darkbrown darkgrey black
+00000
+00000
+00000
+00000
+00000
+
+PlayerSpot
+black
 
 =======
 LEGEND
 =======
-. = Background
+. = Air
 s = Sand
 r = Rock1
 e = Rock2
@@ -79,7 +84,7 @@ p = Pelaaja
 d = Dynamiitti
 t = Tikapuut
 
-Player = Pelaaja or DynamiittiPelaaja
+Player = Pelaaja
 
 =======
 SOUNDS
@@ -91,9 +96,10 @@ COLLISIONLAYERS
 ================
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 Background
+Air
 Dynamiitti, Tikapuut
-Rock1, Rock2, Pelaaja, DynamiittiPelaaja
-Sand, Temp
+Rock1, Rock2, Pelaaja
+Sand, Temp, TopCheck, PlayerSpot
 
 
 
@@ -102,6 +108,11 @@ RULES
 ======
 
 up [ > player] -> [player]
+horizontal [> Pelaaja | Rock1] -> [Pelaaja | TopCheck]
+up [TopCheck | Air] -> [Rock1 | Pelaaja]
+horizontal [> Pelaaja | Rock2] -> [Pelaaja | TopCheck]
+up [TopCheck | Air] -> [Rock2 | Pelaaja]
+
 
 late down[Sand | ] -> [|Temp]
 late [Temp]->[Sand]
@@ -139,7 +150,7 @@ r....t....................................r
 r....t....................................r
 r....t....................................r
 r....t....................................r
-rp...t....................................r
+rp...t....r...............................r
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 rrrrrrerrerrrrrerrrrrrreeerreerrrrerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
