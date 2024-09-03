@@ -2,82 +2,63 @@ title OS1 PuzzleScript tehtävä
 author OS1 Dev Team
 homepage aalto.fi
 
+realtime_interval 1
+
 ========
 OBJECTS
 ========
 
-Background
-lightbrown 
 
-Crate
-gray
-11111
-1...1
-1...1
-1...1
-11111
-
-Milk
-white blue
-.....
-.000.
-.111.
-.111.
-.000.
-
-Plant
-green yellow
-.....
-..11.
-..11.
-..0..
-.000.
-
-Bread
-brown
-.....
-.000.
-.000.
-.....
-.....
-
-Masa
+Sand
 white
-..00.
-.0000
-..00.
-..00.
-..00.
+00000
+00000
+00000
+00000
+00000
+
+Temp
+black
+
+Background
+darkbrown darkgrey black
+00000
+00000
+00000
+00000
+00000
 
 
+Rock1
+lightbrown lightgray white
+00101
+11100
+01200
+00101
+01000
 
+Rock2
+lightbrown lightgray white
+00101
+00111
+02100
+11100
+01000
 
-
-(Tarvitset ainakin avainta oveen sekä jotain, jolla kertoa pelille, että markolla on avain)
 
 
 =======
 LEGEND
 =======
-(Aseta tässä lyhenteet luomillesi objekteille)
-
 . = Background
-(player määrittää liikuteltavan hahmon, voit määrittää useita käyttämällä "OR" merkintää)
-player = Masa
-@ = Masa
-p = Plant
-c = Crate
-b = Bread
-m = Milk
+s = Sand
+r = Rock1
+e = Rock2
 
-Object = Bread or Milk or Plant
 
 =======
 SOUNDS
 =======
-
-
-
 
 
 ================
@@ -85,48 +66,48 @@ COLLISIONLAYERS
 ================
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 
-Background,
-Object
-Player, Crate
-
 
 
 ======
 RULES
 ======
-(Marko on fiksu, joten hän keksii, että laatikonhan voisi työntää laavan päälle päästäkseen ovelle)
-
-("late" ajaa säännön vasta toiminnon tapahduttua. Tällöin sääntö ajetaan vasta pelaajan liikuttua jolloin restart ajetaan samalla hetkellä, kun pelaaja liikkuu laavan päälle eikä vasta seuraavan alussa)
 
 
+late down[Sand | ] -> [|Temp]
+late [Temp]->[Sand]
+late down[Sand | Sand] -> [Sand | Temp]
+late left[Temp|] -> [Sand|Sand]
+late right[|Temp] -> [Sand|Sand]
+late up[temp|] -> [Sand|Sand]
 
-[action Player Object | Crate] -> [Player | Object Crate]
 
-[> Player | Crate] -> [> Player | > Crate]
-[> Crate Object] -> [> Crate > Object]
-[> Player  Object] -> [> Player > Object]
 
-(Markon haluaisi osata avata oven, jos hän "on avaimellinen")
+
+
 
 ==============
 WINCONDITIONS
 ==============
 
 
+
 =======
 LEVELS
 =======
-
-MESSAGE Sähkömies Markolla on nälkä, auta hänet persikan luo !
-
 (Sijoita alla olevaan karttaan luomasi objektit)
 
-...........
-...b..m.p..
-...........
-...........
-...c.....@.
-...........
+rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
+r.........................................r
+r.........................................e
+e.........................................r
+r.........................................r
+r.........................................r
+rree......................................e
+r.rrr.....................................r
+r.........................................r
+r.........................................r
+r.........................................r
+rs........................................r
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
 MESSAGE Voitit pelin.
-
