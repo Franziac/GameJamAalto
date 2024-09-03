@@ -8,6 +8,27 @@ realtime_interval 1
 OBJECTS
 ========
 
+Pelaaja
+black
+
+Tikapuut
+brown darkbrown
+0...0
+0...0
+00000
+0...0
+0...0
+
+Dynamiitti
+red gray orange lightgray
+..12.
+..1..
+00000
+33333
+00000
+
+DynamiittiPelaaja
+black
 
 Sand
 white
@@ -54,7 +75,11 @@ LEGEND
 s = Sand
 r = Rock1
 e = Rock2
+p = Pelaaja
+d = Dynamiitti
+t = Tikapuut
 
+Player = Pelaaja or DynamiittiPelaaja
 
 =======
 SOUNDS
@@ -65,6 +90,10 @@ SOUNDS
 COLLISIONLAYERS
 ================
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
+Background
+Dynamiitti, Tikapuut
+Rock1, Rock2, Pelaaja, DynamiittiPelaaja
+Sand, Temp
 
 
 
@@ -72,6 +101,7 @@ COLLISIONLAYERS
 RULES
 ======
 
+up [ > player] -> [player]
 
 late down[Sand | ] -> [|Temp]
 late [Temp]->[Sand]
@@ -97,17 +127,22 @@ LEVELS
 (Sijoita alla olevaan karttaan luomasi objektit)
 
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
-r.........................................r
-r.........................................e
+rere......................................r
+rr........................................e
 e.........................................r
 r.........................................r
-r.........................................r
-rree......................................e
-r.rrr.....................................r
-r.........................................r
-r.........................................r
-r.........................................r
-rs........................................r
+r.d.......................................r
+rree.t....................................e
+r.rrrt....................................r
+r....t....................................r
+r....t....................................r
+r....t....................................r
+r....t....................................r
+r....t....................................r
+rp...t....................................r
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+rrrrrrerrerrrrrerrrrrrreeerreerrrrerrrrrrrr
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
 MESSAGE Voitit pelin.
