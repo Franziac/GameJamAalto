@@ -2,7 +2,7 @@ title OS1 PuzzleScript tehtävä
 author OS1 Dev Team
 homepage aalto.fi
 
-realtime_interval 1
+realtime_interval 0.3
 
 ========
 OBJECTS
@@ -39,6 +39,9 @@ white
 Temp
 black
 
+PlayerTemp
+black
+
 Background
 darkbrown
 
@@ -59,9 +62,6 @@ lightbrown lightgray white
 11100
 01000
 
-TopCheck
-black
-
 Air 
 darkbrown darkgrey black
 00000
@@ -70,7 +70,21 @@ darkbrown darkgrey black
 00000
 00000
 
-PlayerSpot
+
+ToMove
+black
+
+Spot
+black
+
+SideCheck
+black
+
+TopCheckRock1
+black
+TopCheckRock2
+black
+TopCheckSand
 black
 
 =======
@@ -98,8 +112,8 @@ COLLISIONLAYERS
 Background
 Air
 Dynamiitti, Tikapuut
-Rock1, Rock2, Pelaaja
-Sand, Temp, TopCheck, PlayerSpot
+Rock1, Rock2, Pelaaja, Sand
+Temp, PlayerTemp, SideCheck, TopCheckRock1, TopCheckRock2, TopCheckSand, ToMove, Spot
 
 
 
@@ -107,24 +121,42 @@ Sand, Temp, TopCheck, PlayerSpot
 RULES
 ======
 
-up [ > player] -> [player]
-horizontal [> Pelaaja | Rock1] -> [Pelaaja | TopCheck]
-up [TopCheck | Air] -> [Rock1 | Pelaaja]
-horizontal [> Pelaaja | Rock2] -> [Pelaaja | TopCheck]
-up [TopCheck | Air] -> [Rock2 | Pelaaja]
+(Tikapuut)
+up [ > player no Tikapuut] -> [player]
+down [ > player no Tikapuut] -> [player]
+
+(Hyppy)
+horizontal [> Pelaaja | Rock1] -> [ToMove | TopCheckRock1]
+horizontal [> Pelaaja | Rock2] -> [ToMove | TopCheckRock2]
+horizontal [> Pelaaja | Sand] -> [ToMove | TopCheckSand]
+up [TopCheckRock1 | Air] -> [Rock1 | Pelaaja]
+up [TopCheckRock2 | Air] -> [Rock2 | Pelaaja]
+up [TopCheckSand | Air] -> [Sand | Pelaaja]
+[ToMove | TopCheckRock1] -> [Pelaaja | Rock1]
+[ToMove | TopCheckRock2] -> [Pelaaja | Rock2]
+[ToMove | TopCheckSand] -> [Pelaaja | Sand]
+[ToMove] -> []
+
+(Pelaaja painovoima)
+down [player | Air] -> [| PlayerTemp]
+late [PlayerTemp] -> [player]
 
 
-late down[Sand | ] -> [|Temp]
-late [Temp]->[Sand]
-late down[Sand | Sand] -> [Sand | Temp]
-late left[Temp|] -> [Sand|Sand]
-late right[|Temp] -> [Sand|Sand]
-late up[temp|] -> [Sand|Sand]
+(Hiekka painovoima)
+down [Sand | Air] -> [Air | Temp]
+late [Temp] -> [Sand]
+
+(Hiekka leviäminen)
+down [Sand | Sand] -> [ToMove | SideCheck]
+left [Air | SideCheck] -> [Spot | Sand]
+right [Air | SideCheck] -> [Spot | Sand]
+down [ToMove | SideCheck] -> [Sand | Sand]
+[Spot] -> [Sand]
+[ToMove] -> [Air]
 
 
-
-
-
+(Säädä ilman kanssa)
+late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
 
 ==============
 WINCONDITIONS
@@ -139,20 +171,20 @@ LEVELS
 
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
 rere......................................r
-rr........................................e
+rr............................s...........e
 e.........................................r
-r.........................................r
+r.............................s...........r
 r.d.......................................r
-rree.t....................................e
+rree.t........................s...........e
 r.rrrt....................................r
+r....t........................s...........r
 r....t....................................r
+r....t........................s...........r
 r....t....................................r
-r....t....................................r
-r....t....................................r
-r....t....................................r
-rp...t....r...............................r
-rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
-rrrrrrerrerrrrrerrrrrrreeerreerrrrerrrrrrrr
+r....t........................s...........r
+rp...t....................................r
+rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
+rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
