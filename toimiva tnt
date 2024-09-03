@@ -1,0 +1,166 @@
+title OS1 PuzzleScript tehtävä
+author OS1 Dev Team
+homepage aalto.fi
+
+realtime_interval 0.3
+
+========
+OBJECTS
+========
+
+Background
+black
+Air 
+black
+
+Sand
+lightbrown
+
+
+PlayerA
+white
+
+SideCheck
+black
+
+Spot
+black 
+
+ToMove
+black
+
+Temp
+black
+
+Rock
+gray
+
+Gen
+pink
+
+Tnt
+red
+
+Tnt2
+pink
+
+Tnt3
+red
+
+Tnt4
+pink
+
+Tnt5
+red
+
+Tnt6
+pink
+
+Fireball
+orange
+
+
+
+
+=======
+LEGEND
+=======
+(Aseta tässä lyhenteet luomillesi objekteille)
+s = Sand
+p = PlayerA
+r = Rock
+. = Air
+g = Gen
+t = Tnt
+(player määrittää liikuteltavan hahmon, voit määrittää useita käyttämällä "OR" merkintää)
+player = PlayerA
+destroyable = Rock or Sand or Gen or Air or Tnt or PlayerA
+
+=======
+SOUNDS
+=======
+
+
+================
+COLLISIONLAYERS
+================
+(Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
+
+Background,
+Air, SideCheck, Spot, ToMove
+Temp,
+Player, Sand, Rock, Gen, Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Fireball
+ 
+
+
+
+======
+RULES
+======
+(Hiekkageneraattori koodi:)
+
+down[Gen|Air| Air] -> [Gen|Sand|Air]
+
+
+
+down [Sand | Air] -> [Air | Temp]
+late [Temp] -> [Sand]
+
+down [Sand | Sand] -> [ToMove | SideCheck]
+left [Air | SideCheck] -> [Spot | Sand]
+right [Air | SideCheck] -> [Spot | Sand]
+down [ToMove | SideCheck] -> [Sand | Sand]
+[Spot] -> [Sand]
+[ToMove] -> [Air]
+
+(Tnt koodi:)
+late up[Fireball|destroyable] -> [Fireball|Air]
+late down[Fireball|destroyable] -> [Fireball|Air]
+late left[Fireball|destroyable] -> [Fireball|Air]
+late right[Fireball|destroyable] -> [Air|Air]
+
+late up[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
+late down[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
+late left[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
+late right[Tnt6|destroyable|destroyable] -> [Air|Fireball|Fireball]
+
+
+
+late[Tnt5] -> [Tnt6] 
+late[Tnt4] -> [Tnt5] 
+late[Tnt3] -> [Tnt4] 
+late[Tnt2] -> [Tnt3] 
+late[Tnt] -> [Tnt2] 
+
+
+
+
+==============
+WINCONDITIONS
+==============
+
+
+=======
+LEVELS
+=======
+
+
+....g..................................
+.......................................
+.......................................
+.......................................
+.......................................
+.......................................
+.......................................
+........rrrrrrr........................
+........rrrrrrr........................
+.....rrrrrrtrrr........................
+......rrrrrrrrrrrr.....................
+......r...rrrrrrrr.....................
+.......rrrrrrrrrrr.....................
+.......................................
+.......................................
+...t...................................
+.......................................
+.......................................
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
