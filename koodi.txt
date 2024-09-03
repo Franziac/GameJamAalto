@@ -2,58 +2,52 @@ title OS1 PuzzleScript tehtävä
 author OS1 Dev Team
 homepage aalto.fi
 
-realtime_interval 1
+realtime_interval 0.3
 
 ========
 OBJECTS
 ========
 
+Background
+black
+Air 
+black
 
 Sand
+lightbrown
+
+
+PlayerA
 white
-00000
-00000
-00000
-00000
-00000
+
+SideCheck
+black
+
+Spot
+black 
+
+ToMove
+black
 
 Temp
 black
 
-Background
-darkbrown darkgrey black
-00000
-00000
-00000
-00000
-00000
+Rock
+gray
 
-
-Rock1
-lightbrown lightgray white
-00101
-11100
-01200
-00101
-01000
-
-Rock2
-lightbrown lightgray white
-00101
-00111
-02100
-11100
-01000
 
 
 
 =======
 LEGEND
 =======
-. = Background
+(Aseta tässä lyhenteet luomillesi objekteille)
 s = Sand
-r = Rock1
-e = Rock2
+p = PlayerA
+r = Rock
+. = Air
+(player määrittää liikuteltavan hahmon, voit määrittää useita käyttämällä "OR" merkintää)
+player = PlayerA
 
 
 =======
@@ -66,22 +60,27 @@ COLLISIONLAYERS
 ================
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 
+Background,
+Air, SideCheck, Spot, ToMove
+Temp,
+Player, Sand, Rock
+ 
+
 
 
 ======
 RULES
 ======
 
+down [Sand | Air] -> [Air | Temp]
+late [Temp] -> [Sand]
 
-late down[Sand | ] -> [|Temp]
-late [Temp]->[Sand]
-late down[Sand | Sand] -> [Sand | Temp]
-late left[Temp|] -> [Sand|Sand]
-late right[|Temp] -> [Sand|Sand]
-late up[temp|] -> [Sand|Sand]
-
-
-
+down [Sand | Sand] -> [ToMove | SideCheck]
+left [Air | SideCheck] -> [Spot | Sand]
+right [Air | SideCheck] -> [Spot | Sand]
+down [ToMove | SideCheck] -> [Sand | Sand]
+[Spot] -> [Sand]
+[ToMove] -> [Air]
 
 
 
@@ -90,24 +89,23 @@ WINCONDITIONS
 ==============
 
 
-
 =======
 LEVELS
 =======
-(Sijoita alla olevaan karttaan luomasi objektit)
 
-rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
-r.........................................r
-r.........................................e
-e.........................................r
-r.........................................r
-r.........................................r
-rree......................................e
-r.rrr.....................................r
-r.........................................r
-r.........................................r
-r.........................................r
-rs........................................r
-rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
-MESSAGE Voitit pelin.
+....s........
+.............
+....s........
+.............
+.............
+....s........
+.............
+.............
+....s........
+.............
+.r....r......
+.r.r..r......
+rrrrrrrrrrrrr
+
+
