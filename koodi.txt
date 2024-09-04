@@ -230,7 +230,7 @@ down [player | Air] -> [| PlayerTemp]
 late [PlayerTemp] -> [player]
 
 (Painovoima toimii myos objektin paalla, kun eri collision)
-down [player | Object] -> [| PlayerTemp2 Object]
+down [player no Tikapuut| Object] -> [| PlayerTemp2 Object]
 late [PlayerTemp2] -> [player]
 
 (Painovoima Dynamiitti)
@@ -255,9 +255,10 @@ down [ToMove | SideCheck] -> [Sand | Sand]
 
 (Säädä ilman kanssa)
 late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
+late [Tikapuut Air] -> [Tikapuut]
 
 (Tnt-kanto)
-[ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
+horizontal [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
 
 (Tnt-jättö)
 right [action Pelaaja Dynamiitti | Air] -> [Pelaaja | Tnt]
@@ -308,7 +309,7 @@ r....t....................................r
 r....t........................s...........r
 r....t....................................r
 r....t........................s...........r
-rp...t................................m...r
+rp...t....................................m
 rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
 rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
