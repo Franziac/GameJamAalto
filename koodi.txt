@@ -24,7 +24,7 @@ brown darkbrown
 0...0
 0...0
 
-Dynamiitti
+Dynamiitti (Mukana kannettava)
 red gray orange lightgray
 ..12.
 ..1..
@@ -132,12 +132,12 @@ Fireball
 orange
 
 Sand
-white
-00000
-00000
-00000
-00000
-00000
+white yellow orange
+01211
+11101
+00111
+21110
+10111
 
 Temp
 black
@@ -235,6 +235,17 @@ black
 TopCheckSand
 black
 
+
+ToMoveDynamite
+black
+
+TopCheckRock1Dynamite
+black
+TopCheckRock2Dynamite
+black
+TopCheckSandDynamite
+black
+
 Goal
 gray black lightgray 
 00200
@@ -245,6 +256,23 @@ gray black lightgray
 
 Gen
 white
+
+Koira
+gray lightgray white
+.....
+.1...
+21..1
+10001
+.1.1.
+
+Vine
+green darkgreen
+.00...
+..1.
+..01
+..0..
+.10.
+
 
 =======
 LEGEND
@@ -258,11 +286,14 @@ d = Dynamiitti
 t = Tikapuut
 m = Goal
 g = Gen
+k = Koira
+v = Vine
 
 
 destroyable = Rock1 or Rock2 or Sand or Air or Tnt or Pelaaja
 Object = Dynamiitti
 Player = Pelaaja
+Climbable = Tikapuut or Vine
 
 =======
 SOUNDS
@@ -276,12 +307,12 @@ COLLISIONLAYERS
 Background
 Air
 Dynamiitti
-Tikapuut, Gen
+Tikapuut, Gen, Vine
 Goal
-Rock1, Rock2, Pelaaja, Sand
+Rock1, Rock2, Pelaaja, Sand, Koira
 Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Tnt7, Tnt8, Tnt9, Tnt10, Tnt11, Tnt12, Fireball
 Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13, TempObject
-TopCheckSand, ToMove, Spot
+TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite
 
 
 
@@ -294,8 +325,21 @@ RULES
 late down[Gen|Air| Air|Air] -> [Gen|Sand|Air|Air]
 
 (Tikapuut)
-up [ > player no Tikapuut] -> [player]
-down [ > player no Tikapuut] -> [player]
+up [ > player no Climbable] -> [player]
+down [ > player no Climbable] -> [player]
+
+
+(Hyppy TNT:n kanssa)
+horizontal [> Pelaaja Dynamiitti| Rock1] -> [ToMoveDynamite | TopCheckRock1Dynamite]
+horizontal [> Pelaaja Dynamiitti| Rock2] -> [ToMoveDynamite | TopCheckRock2Dynamite]
+horizontal [> Pelaaja Dynamiitti | Sand] -> [ToMoveDynamite | TopCheckSandDynamite]
+up [TopCheckRock1Dynamite | Air] -> [Rock1 | Pelaaja Dynamiitti]
+up [TopCheckRock2Dynamite | Air] -> [Rock2 | Pelaaja Dynamiitti]
+up [TopCheckSandDynamite | Air] -> [Sand | Pelaaja Dynamiitti]
+[ToMoveDynamite | TopCheckRock1Dynamite] -> [Pelaaja Dynamiitti  | Rock1]
+[ToMoveDynamite | TopCheckRock2Dynamite] -> [Pelaaja Dynamiitti| Rock2]
+[ToMoveDynamite | TopCheckSandDynamite] -> [Pelaaja Dynamiitti | Sand]
+[ToMoveDynamite] -> []
 
 (Hyppy)
 horizontal [> Pelaaja | Rock1] -> [ToMove | TopCheckRock1]
@@ -309,8 +353,10 @@ up [TopCheckSand | Air] -> [Sand | Pelaaja]
 [ToMove | TopCheckSand] -> [Pelaaja | Sand]
 [ToMove] -> []
 
+
+
 (Pelaaja painovoima)
-down [player | Air] -> [| PlayerTemp]
+down [player no climbable| Air] -> [| PlayerTemp]
 late [PlayerTemp] -> [player]
 
 (TNT putoaa pelaajan paalle ja painvastoin, Kannettava TNT Painovoima)
@@ -412,6 +458,10 @@ late[Tnt3] -> [Tnt4]
 late[Tnt2] -> [Tnt3] 
 late[Tnt] -> [Tnt2] 
 
+
+(Koira jahtaa pelaajaa)
+[Pelaaja | ... | Koira] -> [Pelaaja | ... | < Koira]
+
 ==============
 WINCONDITIONS
 ==============
@@ -424,22 +474,22 @@ LEVELS
 (Sijoita alla olevaan karttaan luomasi objektit)
 
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
-rere......................................r
-rr............................s...........e
-e.........................................r
-r.............................s...........r
-r.d.......................................r
-rree.t........................s...........e
-r.rrrt....................................r
-r....t........................s...........r
-r....t....................................r
-r....t........................s...........r
-r....t....................................r
-r....t........................s...........r
-rp...t....................................m
-rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
-rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
-rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+rereerrreerr..............................r
+rr.....eeree..............................e
+e........rre..............................r
+r.........re..............................r
+r.d.......eee.............................r
+rree.t....rrer............................e
+r.rrrt....rerrree.........................r
+r....t.....eeeeeeereerre..................r
+r....t.....eeeeeeerresreee................r
+r....t......rerereesssrereerereeeererer...r
+r....t........errrrssseeeereere...........r
+r....t...........eereeerre..v.............r
+r....t.............eree.....v.............r
+rp...t...v...........ee.....v........k....r
+rrrrrrrr.v.v..rerrrreerrrrrrererreerrrrrrrr
+rrrrrrerre.vvrrerrrrrrreeerreeerererrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
 
