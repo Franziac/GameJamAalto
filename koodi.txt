@@ -290,7 +290,7 @@ late[Tnt] -> [Tnt2]
 WINCONDITIONS
 ==============
 
-all Player on Goal
+some Player on Goal
 
 =======
 LEVELS
