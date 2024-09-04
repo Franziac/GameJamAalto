@@ -87,6 +87,14 @@ black
 TopCheckSand
 black
 
+Goal
+gray black lightgray 
+00200
+21112
+01110
+01112
+21110
+
 =======
 LEGEND
 =======
@@ -97,7 +105,7 @@ e = Rock2
 p = Pelaaja
 d = Dynamiitti
 t = Tikapuut
-
+g = Goal
 Player = Pelaaja
 
 =======
@@ -114,6 +122,7 @@ Air
 Dynamiitti, Tikapuut
 Rock1, Rock2, Pelaaja, Sand
 Temp, PlayerTemp, SideCheck, TopCheckRock1, TopCheckRock2, TopCheckSand, ToMove, Spot
+Goal
 
 
 
@@ -162,7 +171,7 @@ late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
 WINCONDITIONS
 ==============
 
-
+all Player on Goal
 
 =======
 LEVELS
@@ -182,7 +191,7 @@ r....t....................................r
 r....t........................s...........r
 r....t....................................r
 r....t........................s...........r
-rp...t....................................r
+rp...t....................................g
 rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
 rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
