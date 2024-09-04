@@ -267,11 +267,11 @@ gray lightgray white
 
 Vine
 green darkgreen
-.00...
-..1.
-..01
+.00..
+..1..
+..01.
 ..0..
-.10.
+.10..
 
 
 =======
@@ -460,7 +460,10 @@ late[Tnt] -> [Tnt2]
 
 
 (Koira jahtaa pelaajaa)
-[Pelaaja | ... | Koira] -> [Pelaaja | ... | < Koira]
+horizontal [Pelaaja | ... | Koira] -> [Pelaaja | ... | < Koira]
+
+(Koira osuessa kissaan kissa kuolee)
+[Pelaaja | < Koira] -> restart
 
 ==============
 WINCONDITIONS
@@ -482,14 +485,14 @@ r.d.......eee.............................r
 rree.t....rrer............................e
 r.rrrt....rerrree.........................r
 r....t.....eeeeeeereerre..................r
-r....t.....eeeeeeerresreee................r
-r....t......rerereesssrereerereeeererer...r
-r....t........errrrssseeeereere...........r
-r....t...........eereeerre..v.............r
-r....t.............eree.....v.............r
-rp...t...v...........ee.....v........k....r
-rrrrrrrr.v.v..rerrrreerrrrrrererreerrrrrrrr
-rrrrrrerre.vvrrerrrrrrreeerreeerererrrrrrrr
+r....t.....eeeeeeerresreee...............tr
+r....t......rerereesssrereerereeeerererretr
+r....t......v.errrrssseeeereereererv.....tr
+r....t......v..v.eereeerre...vvvv.vv.....tr
+r....t....erv..v.v.eree......vv.vvvvv....tr
+rp...t...errrr...v...ee......v...v..v....tr
+rrrrrrrrerereererrrreerrrre..v..........ktr
+rrrrrrerrererrrerrrrrrreeerreeerererrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
 
