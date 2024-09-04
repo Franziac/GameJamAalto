@@ -9,7 +9,13 @@ OBJECTS
 ========
 
 Pelaaja
-black
+black white 
+.....
+.0.0.
+0..01
+.0000
+.0.0.
+
 
 Tikapuut
 brown darkbrown
@@ -105,7 +111,7 @@ e = Rock2
 p = Pelaaja
 d = Dynamiitti
 t = Tikapuut
-g = Goal
+m = Goal
 Player = Pelaaja
 
 =======
@@ -191,7 +197,7 @@ r....t....................................r
 r....t........................s...........r
 r....t....................................r
 r....t........................s...........r
-rp...t....................................g
+rp...t....................................m
 rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
 rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
