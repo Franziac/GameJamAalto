@@ -80,6 +80,54 @@ red gray yellow lightgray
 33333
 00000
 
+Tnt7
+red gray orange lightgray
+.....
+..2..
+00000
+33333
+00000
+
+Tnt8
+red gray yellow lightgray
+.....
+..2..
+00000
+33333
+00000
+
+Tnt9
+red gray orange lightgray
+.....
+..2..
+00000
+33333
+00000
+
+Tnt10
+red gray yellow lightgray
+.....
+..2..
+00000
+33333
+00000
+
+Tnt11
+red gray orange lightgray
+.....
+..2..
+00000
+33333
+00000
+
+Tnt12
+red gray yellow lightgray
+.....
+..2..
+00000
+33333
+00000
+
 Fireball
 orange
 
@@ -98,6 +146,39 @@ TempDynamiitti
 black
 
 TempDynamiitti2
+black
+
+TempDynamiitti3
+black
+
+TempDynamiitti4
+black
+
+TempDynamiitti5
+black
+
+TempDynamiitti6
+black
+
+TempDynamiitti7
+black
+
+TempDynamiitti8
+black
+
+TempDynamiitti9
+black
+
+TempDynamiitti10
+black
+
+TempDynamiitti11
+black
+
+TempDynamiitti12
+black
+
+TempDynamiitti13
 black
 
 PlayerTemp
@@ -195,8 +276,8 @@ Dynamiitti
 Tikapuut, Gen
 Goal
 Rock1, Rock2, Pelaaja, Sand
-Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Fireball
-Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2
+Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Tnt7, Tnt8, Tnt9, Tnt10, Tnt11, Tnt12, Fireball
+Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13
 TopCheckSand, ToMove, Spot
 
 
@@ -229,16 +310,51 @@ up [TopCheckSand | Air] -> [Sand | Pelaaja]
 down [player | Air] -> [| PlayerTemp]
 late [PlayerTemp] -> [player]
 
-(Painovoima toimii myos objektin paalla, kun eri collision)
-down [player no Tikapuut| Object] -> [| PlayerTemp2 Object]
+(TNT putoaa pelaajan paalle ja painvastoin)
+down [player no Tikapuut | Object] -> [| PlayerTemp2 Object]
 late [PlayerTemp2] -> [player]
 
-(Painovoima Dynamiitti)
-down [Dynamiitti | Air] -> [Air | TempDynamiitti]
-late [TempDynamiitti] -> [Dynamiitti]
+down [Object | Pelaaja] -> [Air | TempDynamiitti Pelaaja]
+late [TempDynamiitti] -> [Object]
 
-down [Dynamiitti | Pelaaja] -> [Air | TempDynamiitti2 Pelaaja]
-late [TempDynamiitti2] -> [Dynamiitti]
+(Painovoima Rajahtavat, rajahtava TNT putoaa ilmassa)
+
+down [Tnt12 | Air] -> [Air | TempDynamiitti13]
+late [TempDynamiitti13] -> [Tnt12]
+
+down [Tnt11 | Air] -> [Air | TempDynamiitti12]
+late [TempDynamiitti12] -> [Tnt11]
+
+down [Tnt10 | Air] -> [Air | TempDynamiitti11]
+late [TempDynamiitti11] -> [Tnt10]
+
+down [Tnt9 | Air] -> [Air | TempDynamiitti10]
+late [TempDynamiitti10] -> [Tnt9]
+
+down [Tnt8 | Air] -> [Air | TempDynamiitti9]
+late [TempDynamiitti9] -> [Tnt8]
+
+down [Tnt7 | Air] -> [Air | TempDynamiitti8]
+late [TempDynamiitti8] -> [Tnt7]
+
+down [Tnt6 | Air] -> [Air | TempDynamiitti7]
+late [TempDynamiitti7] -> [Tnt6]
+
+down [Tnt5 | Air] -> [Air | TempDynamiitti6]
+late [TempDynamiitti6] -> [Tnt5]
+
+down [Tnt4 | Air] -> [Air | TempDynamiitti5]
+late [TempDynamiitti5] -> [Tnt4]
+
+down [Tnt3 | Air] -> [Air | TempDynamiitti4]
+late [TempDynamiitti4] -> [Tnt3]
+
+down [Tnt2 | Air] -> [Air | TempDynamiitti3]
+late [TempDynamiitti3] -> [Tnt2]
+
+down [Tnt | Air] -> [Air | TempDynamiitti2]
+late [TempDynamiitti2] -> [Tnt]
+
 
 (Hiekka painovoima)
 down [Sand | Air] -> [Air | Temp]
@@ -273,13 +389,17 @@ late down[Fireball|destroyable] -> [Fireball|Air]
 late left[Fireball|destroyable] -> [Fireball|Air]
 late right[Fireball|destroyable] -> [Air|Air]
 
-late up[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
-late down[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
-late left[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
-late right[Tnt6|destroyable|destroyable] -> [Air|Fireball|Fireball]
+late up[Tnt12|destroyable|destroyable] -> [Tnt12|Fireball|Fireball]
+late down[Tnt12|destroyable|destroyable] -> [Tnt12|Fireball|Fireball]
+late left[Tnt12|destroyable|destroyable] -> [Tnt12|Fireball|Fireball]
+late right[Tnt12|destroyable|destroyable] -> [Air|Fireball|Fireball]
 
-
-
+late[Tnt11] -> [Tnt12] 
+late[Tnt10] -> [Tnt11] 
+late[Tnt9] -> [Tnt10] 
+late[Tnt8] -> [Tnt9] 
+late[Tnt7] -> [Tnt8] 
+late[Tnt6] -> [Tnt7] 
 late[Tnt5] -> [Tnt6] 
 late[Tnt4] -> [Tnt5] 
 late[Tnt3] -> [Tnt4] 
