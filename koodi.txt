@@ -207,7 +207,7 @@ RULES
 
 (Hiekkageneraattori koodi:)
 
-down[Gen|Air| Air|Air] -> [Gen|Sand|Air|Air]
+late down[Gen|Air| Air|Air] -> [Gen|Sand|Air|Air]
 
 (Tikapuut)
 up [ > player no Tikapuut] -> [player]
