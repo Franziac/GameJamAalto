@@ -16,7 +16,6 @@ black white
 .0000
 .0.0.
 
-
 Tikapuut
 brown darkbrown
 0...0
@@ -27,7 +26,7 @@ brown darkbrown
 
 Dynamiitti
 red gray orange lightgray
-..111
+..12.
 ..1..
 00000
 33333
@@ -35,7 +34,7 @@ red gray orange lightgray
 
 Tnt
 red gray orange lightgray
-..112
+..12.
 ..1..
 00000
 33333
@@ -43,7 +42,7 @@ red gray orange lightgray
 
 Tnt2
 red gray yellow lightgray
-..112
+..12.
 ..1..
 00000
 33333
@@ -51,7 +50,7 @@ red gray yellow lightgray
 
 Tnt3
 red gray orange lightgray
-..12.
+..2..
 ..1..
 00000
 33333
@@ -59,7 +58,7 @@ red gray orange lightgray
 
 Tnt4
 red gray yellow lightgray
-..12.
+..2..
 ..1..
 00000
 33333
@@ -67,19 +66,22 @@ red gray yellow lightgray
 
 Tnt5
 red gray orange lightgray
-..12.
-..1..
+.....
+..2..
 00000
 33333
 00000
 
 Tnt6
 red gray yellow lightgray
-..12.
-..1..
+.....
+..2..
 00000
 33333
 00000
+
+Fireball
+orange
 
 Sand
 white
@@ -92,7 +94,16 @@ white
 Temp
 black
 
+TempDynamiitti
+black
+
+TempDynamiitti2
+black
+
 PlayerTemp
+black
+
+PlayerTemp2
 black
 
 Background
@@ -148,6 +159,9 @@ gray black lightgray
 01112
 21110
 
+Gen
+white
+
 =======
 LEGEND
 =======
@@ -159,6 +173,11 @@ p = Pelaaja
 d = Dynamiitti
 t = Tikapuut
 m = Goal
+g = Gen
+
+
+destroyable = Rock1 or Rock2 or Sand or Air or Tnt or Pelaaja
+Object = Dynamiitti
 Player = Pelaaja
 
 =======
@@ -172,16 +191,23 @@ COLLISIONLAYERS
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 Background
 Air
-Dynamiitti, Tikapuut
-Rock1, Rock2, Pelaaja, Sand
-Temp, PlayerTemp, SideCheck, TopCheckRock1, TopCheckRock2, TopCheckSand, ToMove, Spot
+Dynamiitti
+Tikapuut, Gen
 Goal
+Rock1, Rock2, Pelaaja, Sand
+Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Fireball
+Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2
+TopCheckSand, ToMove, Spot
 
 
 
 ======
 RULES
 ======
+
+(Hiekkageneraattori koodi:)
+
+down[Gen|Air| Air|Air] -> [Gen|Sand|Air|Air]
 
 (Tikapuut)
 up [ > player no Tikapuut] -> [player]
@@ -203,6 +229,16 @@ up [TopCheckSand | Air] -> [Sand | Pelaaja]
 down [player | Air] -> [| PlayerTemp]
 late [PlayerTemp] -> [player]
 
+(Painovoima toimii myos objektin paalla, kun eri collision)
+down [player | Object] -> [| PlayerTemp2 Object]
+late [PlayerTemp2] -> [player]
+
+(Painovoima Dynamiitti)
+down [Dynamiitti | Air] -> [Air | TempDynamiitti]
+late [TempDynamiitti] -> [Dynamiitti]
+
+down [Dynamiitti | Pelaaja] -> [Air | TempDynamiitti2 Pelaaja]
+late [TempDynamiitti2] -> [Dynamiitti]
 
 (Hiekka painovoima)
 down [Sand | Air] -> [Air | Temp]
@@ -219,6 +255,34 @@ down [ToMove | SideCheck] -> [Sand | Sand]
 
 (Säädä ilman kanssa)
 late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
+
+(Tnt-kanto)
+[ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
+
+(Tnt-jättö)
+right [action Pelaaja Dynamiitti | Air] -> [Pelaaja | Tnt]
+
+
+
+(TNT-rajahdys)
+late [Fireball Player] -> restart
+late up[Fireball|destroyable] -> [Fireball|Air]
+late down[Fireball|destroyable] -> [Fireball|Air]
+late left[Fireball|destroyable] -> [Fireball|Air]
+late right[Fireball|destroyable] -> [Air|Air]
+
+late up[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
+late down[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
+late left[Tnt6|destroyable|destroyable] -> [Tnt6|Fireball|Fireball]
+late right[Tnt6|destroyable|destroyable] -> [Air|Fireball|Fireball]
+
+
+
+late[Tnt5] -> [Tnt6] 
+late[Tnt4] -> [Tnt5] 
+late[Tnt3] -> [Tnt4] 
+late[Tnt2] -> [Tnt3] 
+late[Tnt] -> [Tnt2] 
 
 ==============
 WINCONDITIONS
@@ -244,10 +308,61 @@ r....t....................................r
 r....t........................s...........r
 r....t....................................r
 r....t........................s...........r
-rp...t....................................m
+rp...t....................................r
 rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
 rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+
+
+rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
+rere......................................r
+rr........................................e
+e.........................................r
+r.........................................r
+r.d.......................................r
+rree.t....................................e
+r.rrrt....................................r
+r....t.......................s............r
+r....t......................sss...........r
+r....t.....................sssss..........r
+r....t.....................rrrssr.........r
+r....t.....................rrrrsrr........r
+rp...t.......................rrsrrr....m..r
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+rrrrrrerrerrrrrerrrrrrreeerreerrrrerrrrrrrr
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrggggrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr........rrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrgrrrrrrrrrrrrrrrrrrrrrrrrrrrr............rrrrrrrrrrrrrrrrrrrr
+rrrrrrr......................rrrrrrrrrrrr...........rrr..ssss.....................rrrrr
+rrrr.........................rrrrrrrrr...............rrssssssss.....................rrr
+rr...........................rrrrrrrrr................r.sssssss.....................rrr
+r.............................rrrrrrrr.t..d..........rrrsssssssss....................rr
+rr.............................rrrrrr..trrreerereeee...rrr.sssseeeeeeee..............rr
+rrr................r.............rrrr..treeereeeeeeeee....ssssseeee..................rr
+r.......p.......rrrr...................terreeeeeee...eeeessssseeee...................rr
+rrrrrrrrrrrrrrrrrrrrrrrr...............teereeeee......eeeeeeeee......................rr
+rrrrrrrrrrr..rrrrrrrrrrrrrrrrrrrrrr....trereeee.........t..eeee.....................rrr
+rr...................rrrrrrrrrrrr......trreeeee.........t............................rr
+rr.........................rrrrr.......trreee...........teeeee.......................rr
+r...........................rrr.....rrrrree.............t..eeee......................rr
+rr...........................rrr...rrreeeee.............t....eee....................rrr
+rr............................rrr.rreeeee...............teeeeee.......t.......m...rrrrr
+r..............................rrrreee..................t.............trrrrrrrrrrrrrrrr
+rr......................................................t.............t....rrrrrrrrrrrr
+rr......................................................t.............t.........rrrrrrr
+r.......................................................t.............t............rrrr
+r.......................................................t...........................rrr
+rr......................................................t...........................rrr
+r.......................................................t...........................rrr
+r.....dddddd.t..........................................t...........................rrr
+rr....rrrrrrrt..........................................t......................rrrrrrrr
+rrr...rrrrrrrt..........................................t..............rrrrrrrrrrrrrrrr
+rrrr..rrrrrrrt..........................................t..rrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+
 
 MESSAGE Voitit pelin.
