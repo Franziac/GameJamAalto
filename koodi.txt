@@ -9,7 +9,7 @@ OBJECTS
 ========
 
 Pelaaja
-black white 
+black white
 .....
 .0.0.
 0..01
@@ -27,12 +27,59 @@ brown darkbrown
 
 Dynamiitti
 red gray orange lightgray
+..111
+..1..
+00000
+33333
+00000
+
+Tnt
+red gray orange lightgray
+..112
+..1..
+00000
+33333
+00000
+
+Tnt2
+red gray yellow lightgray
+..112
+..1..
+00000
+33333
+00000
+
+Tnt3
+red gray orange lightgray
 ..12.
 ..1..
 00000
 33333
 00000
 
+Tnt4
+red gray yellow lightgray
+..12.
+..1..
+00000
+33333
+00000
+
+Tnt5
+red gray orange lightgray
+..12.
+..1..
+00000
+33333
+00000
+
+Tnt6
+red gray yellow lightgray
+..12.
+..1..
+00000
+33333
+00000
 
 Sand
 white
