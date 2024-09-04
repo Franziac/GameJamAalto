@@ -258,6 +258,7 @@ late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
 late [Tikapuut Air] -> [Tikapuut]
 
 (Tnt-kanto)
+up [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
 horizontal [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
 
 (Tnt-jättö)
