@@ -273,6 +273,41 @@ green darkgreen
 ..0..
 .10..
 
+EyeTL
+black white lightred purple lightgray
+.....
+...33
+..341
+.3421
+32213
+
+EyeTR
+black white lightred purple lightgray
+.....
+33...
+113..
+3313.
+00313
+
+EyeBL
+black white lightred purple lightgray
+31113
+.3112
+..321
+...33
+.....
+
+EyeBR
+black white lightred purple lightgray
+00343
+3343.
+143..
+33...
+.....
+
+
+EyeHitBox
+darkbrown
 
 =======
 LEGEND
@@ -288,9 +323,13 @@ m = Goal
 g = Gen
 k = Koira
 v = Vine
+h = EyeHitBox
+l = EyeTL
+n = EyeTR
+c = EyeBL
+x = EyeBR
 
-
-destroyable = Rock1 or Rock2 or Sand or Air or Tnt or Pelaaja
+destroyable = Rock1 or Rock2 or Sand or Air or Tnt or Pelaaja or EyeTL or EyeTR or EyeBL or EyeBR or EyeHitBox
 Object = Dynamiitti
 Player = Pelaaja
 Climbable = Tikapuut or Vine
@@ -309,10 +348,10 @@ Air
 Dynamiitti
 Tikapuut, Gen, Vine
 Goal
-Rock1, Rock2, Pelaaja, Sand, Koira
+Rock1, Rock2, Pelaaja, Sand, Koira, EyeTL, EyeTR, EyeBL, EyeBR
 Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Tnt7, Tnt8, Tnt9, Tnt10, Tnt11, Tnt12, Fireball
 Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13, TempObject
-TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite
+TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite, EyeHitBox
 
 
 
@@ -468,6 +507,11 @@ horizontal [Pelaaja | ... | Koira] -> [Pelaaja | ... | < Koira]
 (Koira osuessa kissaan kissa kuolee)
 [Pelaaja | < Koira] -> restart
 
+
+(Silman hitbox-restarttaa pelin)
+late [Pelaaja EyeHitBox] -> restart
+
+
 ==============
 WINCONDITIONS
 ==============
@@ -482,18 +526,18 @@ LEVELS
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
 rereerrreerr..............................r
 rr.....eeree..............................e
-e........rre..............................r
-r.........re..............................r
-r.d.......eee.............................r
-rree.t....rrer............................e
-r.rrrt....rerrree.........................r
-r....t.....eeeeeeereerre..................r
-r....t.....eeeeeeerresreee...............tr
+e........rre.............................tr
+r.........re.............................tr
+r.d.......eee............................tr
+rree.t....rrer.m.........................te
+r.rrrt....rerrree.............erererererrtr
+r....t.....eeeeeeereerre....lnhhhhhhhh...tr
+r....t.....eeeeeeerresreee..cxhhhhhhhhheptr
 r....t......rerereesssrereerereeeerererretr
 r....t......v.errrrssseeeereereererv.....tr
 r....t......v..v.eereeerre...vvvv.vv.....tr
 r....t....erv..v.v.eree......vv.vvvvv....tr
-rp...t...errrr...v...ee......v...v..v....tr
+r....t...errrr...v...ee......v...v..v....tr
 rrrrrrrrerereererrrreerrrre..v..........ktr
 rrrrrrerrererrrerrrrrrreeerreeerererrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
