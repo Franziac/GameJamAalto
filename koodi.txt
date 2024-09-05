@@ -1,6 +1,5 @@
-title OS1 PuzzleScript tehtävä
-author OS1 Dev Team
-homepage aalto.fi
+title Hiekka-Samin seikkailu
+author Elja, Frans ja Otto
 
 realtime_interval 0.3
 
@@ -193,6 +192,9 @@ black
 Background
 darkbrown
 
+TempSinko
+black
+
 
 Rock1
 lightbrown lightgray white
@@ -209,6 +211,7 @@ lightbrown lightgray white
 02100
 11100
 01000
+
 
 Air 
 darkbrown darkgrey black
@@ -305,6 +308,21 @@ black white lightred purple lightgray
 33...
 .....
 
+RocketLauncher
+green black red
+02010
+02000
+.....
+.....
+.....
+
+Missile
+green
+.....
+0.000
+00000
+0.000
+.....
 
 EyeHitBox
 darkbrown
@@ -328,11 +346,13 @@ l = EyeTL
 n = EyeTR
 c = EyeBL
 x = EyeBR
+z = RocketLauncher
 
-destroyable = Rock1 or Rock2 or Sand or Air or Tnt or Pelaaja or EyeTL or EyeTR or EyeBL or EyeBR or EyeHitBox
-Object = Dynamiitti
+destroyable = Rock1 or Sand or Air or Tnt or Pelaaja or EyeTL or EyeTR or EyeBL or EyeBR or  EyeHitBox or Tikapuut or Fireball or Tnt or Tnt2 or Tnt3 or Tnt4 or Tnt5 or Tnt6 or Tnt7 or Tnt8 or Tnt9 or Tnt10 or Tnt11 or Tnt12
+Object = Dynamiitti 
 Player = Pelaaja
 Climbable = Tikapuut or Vine
+
 
 =======
 SOUNDS
@@ -351,7 +371,8 @@ Goal
 Rock1, Rock2, Pelaaja, Sand, Koira, EyeTL, EyeTR, EyeBL, EyeBR
 Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Tnt7, Tnt8, Tnt9, Tnt10, Tnt11, Tnt12, Fireball
 Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13, TempObject
-TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite, EyeHitBox
+TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite, EyeHitBox,
+RocketLauncher, Missile, TempSinko
 
 
 
@@ -380,10 +401,23 @@ up [TopCheckSandDynamite | Air] -> [Sand | Pelaaja Dynamiitti]
 [ToMoveDynamite | TopCheckSandDynamite] -> [Pelaaja Dynamiitti | Sand]
 [ToMoveDynamite] -> []
 
+(Hyppy singon kanssa)
+horizontal [> Pelaaja RocketLauncher| Rock1] -> [ToMoveDynamite | TopCheckRock1Dynamite]
+horizontal [> Pelaaja RocketLauncher| Rock2] -> [ToMoveDynamite | TopCheckRock2Dynamite]
+horizontal [> Pelaaja RocketLauncher | Sand] -> [ToMoveDynamite | TopCheckSandDynamite]
+up [TopCheckRock1Dynamite | Air] -> [Rock1 | Pelaaja RocketLauncher]
+up [TopCheckRock2Dynamite | Air] -> [Rock2 | Pelaaja RocketLauncher]
+up [TopCheckSandDynamite | Air] -> [Sand | Pelaaja RocketLauncher]
+[ToMoveDynamite | TopCheckRock1Dynamite] -> [Pelaaja RocketLauncher  | Rock1]
+[ToMoveDynamite | TopCheckRock2Dynamite] -> [Pelaaja RocketLauncher| Rock2]
+[ToMoveDynamite | TopCheckSandDynamite] -> [Pelaaja RocketLauncher | Sand]
+[ToMoveDynamite] -> []
+
 (Hyppy)
 horizontal [> Pelaaja | Rock1] -> [ToMove | TopCheckRock1]
 horizontal [> Pelaaja | Rock2] -> [ToMove | TopCheckRock2]
 horizontal [> Pelaaja | Sand] -> [ToMove | TopCheckSand]
+
 up [TopCheckRock1 | Air] -> [Rock1 | Pelaaja]
 up [TopCheckRock2 | Air] -> [Rock2 | Pelaaja]
 up [TopCheckSand | Air] -> [Sand | Pelaaja]
@@ -410,6 +444,16 @@ late [TempDynamiitti] -> [Object]
 
 down [Object | Air] -> [ | TempObject]
 late [TempObject] -> [Object]
+
+(sinko putoaa pelaajan paalle ja painvastoin, Kannettava sinko Painovoima)
+down [player no Tikapuut | RocketLauncher] -> [| PlayerTemp2 RocketLauncher]
+late [PlayerTemp2] -> [player]
+
+down [RocketLauncher | Pelaaja] -> [Air | TempSinko Pelaaja]
+late [TempSinko] -> [RocketLauncher]
+
+down [RocketLauncher | Air] -> [ | TempObject]
+late [TempObject] -> [RocketLauncher]
 
 (Painovoima Rajahtavat, rajahtava TNT putoaa ilmassa)
 
@@ -471,6 +515,10 @@ late [Tikapuut Air] -> [Tikapuut]
 up [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
 horizontal [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
 
+(Sinko-kanto)
+up [ > Pelaaja RocketLauncher] -> [ > Pelaaja > RocketLauncher]
+horizontal [ > Pelaaja RocketLauncher] -> [ > Pelaaja > RocketLauncher]
+
 (Tnt-jättö)
 right [action Pelaaja Dynamiitti | Air] -> [Pelaaja | Tnt]
 
@@ -499,6 +547,12 @@ late[Tnt4] -> [Tnt5]
 late[Tnt3] -> [Tnt4] 
 late[Tnt2] -> [Tnt3] 
 late[Tnt] -> [Tnt2] 
+
+(ammu singolla)
+right [action Pelaaja RocketLauncher |] -> [Pelaaja RocketLauncher|Missile]
+
+right [Missile|Air] -> [Air|Missile]
+right[Missile|destroyable] -> [Air|Tnt11]
 
 
 (Koira jahtaa pelaajaa)
@@ -531,8 +585,8 @@ r.........re.............................tr
 r.d.......eee............................tr
 rree.t....rrer.m.........................te
 r.rrrt....rerrree.............erererererrtr
-r....t.....eeeeeeereerre....lnhhhhhhhh...tr
-r....t.....eeeeeeerresreee..cxhhhhhhhhheptr
+r....t.....eeeeeeereerre....lnhhhhhhhh.p.tr
+r....t.....eeeeeeerresreee..cxhhhhhhhhhe.tr
 r....t......rerereesssrereerereeeerererretr
 r....t......v.errrrssseeeereereererv.....tr
 r....t......v..v.eereeerre...vvvv.vv.....tr
@@ -592,5 +646,20 @@ rrr...rrrrrrrt..........................................t..............rrrrrrrrr
 rrrr..rrrrrrrt..........................................t..rrrrrrrrrrrrrrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+r...................sssssssssssssss.......................r
+r................ssssssssssssssssssss.....................r
+r................sssssssssssssssssssss....................r
+r...............ssssssssssssssssssssss....................r
+r..............ssssssssssssssssssssssss...................r
+r.............ssssssssssssssssssssssssss..................r
+r............ssssssssssssssssssssssssssss.................r
+r...........sssssssssssssssssssssssssssssss...............r
+r.p......z.sssssssssssssssssssssssssssssssss..........m...r
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
 MESSAGE Voitit pelin.
