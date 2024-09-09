@@ -1,6 +1,5 @@
-title OS1 PuzzleScript tehtävä
-author OS1 Dev Team
-homepage aalto.fi
+title Hiekka-Samin seikkailu
+author Elja, Frans ja Otto
 
 realtime_interval 0.3
 
@@ -24,7 +23,7 @@ brown darkbrown
 0...0
 0...0
 
-Dynamiitti
+Dynamiitti (Mukana kannettava)
 red gray orange lightgray
 ..12.
 ..1..
@@ -132,12 +131,12 @@ Fireball
 orange
 
 Sand
-white
-00000
-00000
-00000
-00000
-00000
+white yellow orange
+01211
+11101
+00111
+21110
+10111
 
 Temp
 black
@@ -181,6 +180,9 @@ black
 TempDynamiitti13
 black
 
+TempObject
+black
+
 PlayerTemp
 black
 
@@ -189,6 +191,9 @@ black
 
 Background
 darkbrown
+
+TempSinko
+black
 
 
 Rock1
@@ -206,6 +211,7 @@ lightbrown lightgray white
 02100
 11100
 01000
+
 
 Air 
 darkbrown darkgrey black
@@ -232,6 +238,17 @@ black
 TopCheckSand
 black
 
+
+ToMoveDynamite
+black
+
+TopCheckRock1Dynamite
+black
+TopCheckRock2Dynamite
+black
+TopCheckSandDynamite
+black
+
 Goal
 gray black lightgray 
 00200
@@ -242,6 +259,90 @@ gray black lightgray
 
 Gen
 white
+
+Koira
+gray lightgray white
+.....
+.1...
+21..1
+10001
+.1.1.
+
+Vine
+green darkgreen
+.00..
+..1..
+..01.
+..0..
+.10..
+
+EyeTL
+black white lightred purple lightgray
+.....
+...33
+..341
+.3421
+32213
+
+EyeTR
+black white lightred purple lightgray
+.....
+33...
+113..
+3313.
+00313
+
+EyeBL
+black white lightred purple lightgray
+31113
+.3112
+..321
+...33
+.....
+
+EyeBR
+black white lightred purple lightgray
+00343
+3343.
+143..
+33...
+.....
+
+RocketLauncher
+green black red
+02010
+02000
+.....
+.....
+.....
+
+Missile
+green
+.....
+0.000
+00000
+0.000
+.....
+
+EyeHitBox
+darkbrown
+
+Pickaxe
+blue brown
+00...
+..0..
+..10.
+.1..0
+1...0
+
+PickaxeRock
+lightbrown lightgray white darkgray
+30101
+13100
+03330
+00131
+01003
+
 
 =======
 LEGEND
@@ -255,11 +356,22 @@ d = Dynamiitti
 t = Tikapuut
 m = Goal
 g = Gen
+k = Koira
+v = Vine
+h = EyeHitBox
+l = EyeTL
+n = EyeTR
+c = EyeBL
+x = EyeBR
+z = RocketLauncher
+q = Pickaxe
+i = PickaxeRock
 
-
-destroyable = Rock1 or Rock2 or Sand or Air or Tnt or Pelaaja
-Object = Dynamiitti
+destroyable = Rock1 or Sand or Air or Tnt or Pelaaja or EyeTL or EyeTR or EyeBL or EyeBR or  EyeHitBox or Tikapuut or Fireball or Tnt2 or Tnt3 or Tnt4 or Tnt5 or Tnt6 or Tnt7 or Tnt8 or Tnt9 or Tnt10 or Tnt11 or Tnt12 or Vine
+Object = Dynamiitti 
 Player = Pelaaja
+Climbable = Tikapuut or Vine
+
 
 =======
 SOUNDS
@@ -272,13 +384,14 @@ COLLISIONLAYERS
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 Background
 Air
-Dynamiitti
-Tikapuut, Gen
+Dynamiitti, Pickaxe
+Tikapuut, Gen, Vine
 Goal
-Rock1, Rock2, Pelaaja, Sand
+Rock1, Rock2, Pelaaja, PickaxeRock,Sand, Koira, EyeTL, EyeTR, EyeBL, EyeBR
 Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Tnt7, Tnt8, Tnt9, Tnt10, Tnt11, Tnt12, Fireball
-Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13
-TopCheckSand, ToMove, Spot
+Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13, TempObject
+TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite, EyeHitBox,
+RocketLauncher, Missile, TempSinko
 
 
 
@@ -288,34 +401,78 @@ RULES
 
 (Hiekkageneraattori koodi:)
 
-down[Gen|Air| Air|Air] -> [Gen|Sand|Air|Air]
+late down[Gen|Air| Air|Air] -> [Gen|Sand|Air|Air]
 
 (Tikapuut)
-up [ > player no Tikapuut] -> [player]
-down [ > player no Tikapuut] -> [player]
+up [ > player no Climbable] -> [player]
+down [ > player no Climbable] -> [player]
+
+
+(Hyppy TNT:n kanssa)
+horizontal [> Pelaaja Dynamiitti| Rock1] -> [ToMoveDynamite | TopCheckRock1Dynamite]
+horizontal [> Pelaaja Dynamiitti| Rock2] -> [ToMoveDynamite | TopCheckRock2Dynamite]
+horizontal [> Pelaaja Dynamiitti | Sand] -> [ToMoveDynamite | TopCheckSandDynamite]
+up [TopCheckRock1Dynamite | Air] -> [Rock1 | Pelaaja Dynamiitti]
+up [TopCheckRock2Dynamite | Air] -> [Rock2 | Pelaaja Dynamiitti]
+up [TopCheckSandDynamite | Air] -> [Sand | Pelaaja Dynamiitti]
+[ToMoveDynamite | TopCheckRock1Dynamite] -> [Pelaaja Dynamiitti  | Rock1]
+[ToMoveDynamite | TopCheckRock2Dynamite] -> [Pelaaja Dynamiitti| Rock2]
+[ToMoveDynamite | TopCheckSandDynamite] -> [Pelaaja Dynamiitti | Sand]
+[ToMoveDynamite] -> []
+
+(Hyppy singon kanssa)
+horizontal [> Pelaaja RocketLauncher| Rock1] -> [ToMoveDynamite | TopCheckRock1Dynamite]
+horizontal [> Pelaaja RocketLauncher| Rock2] -> [ToMoveDynamite | TopCheckRock2Dynamite]
+horizontal [> Pelaaja RocketLauncher | Sand] -> [ToMoveDynamite | TopCheckSandDynamite]
+up [TopCheckRock1Dynamite | Air] -> [Rock1 | Pelaaja RocketLauncher]
+up [TopCheckRock2Dynamite | Air] -> [Rock2 | Pelaaja RocketLauncher]
+up [TopCheckSandDynamite | Air] -> [Sand | Pelaaja RocketLauncher]
+[ToMoveDynamite | TopCheckRock1Dynamite] -> [Pelaaja RocketLauncher  | Rock1]
+[ToMoveDynamite | TopCheckRock2Dynamite] -> [Pelaaja RocketLauncher| Rock2]
+[ToMoveDynamite | TopCheckSandDynamite] -> [Pelaaja RocketLauncher | Sand]
+[ToMoveDynamite] -> []
 
 (Hyppy)
 horizontal [> Pelaaja | Rock1] -> [ToMove | TopCheckRock1]
 horizontal [> Pelaaja | Rock2] -> [ToMove | TopCheckRock2]
 horizontal [> Pelaaja | Sand] -> [ToMove | TopCheckSand]
+
 up [TopCheckRock1 | Air] -> [Rock1 | Pelaaja]
 up [TopCheckRock2 | Air] -> [Rock2 | Pelaaja]
 up [TopCheckSand | Air] -> [Sand | Pelaaja]
+up [TopCheckRock1 | Tikapuut] -> [Rock1 | Tikapuut Pelaaja]
+up [TopCheckRock2 | Tikapuut] -> [Rock2 | Tikapuut Pelaaja]
+up [TopCheckSand | Tikapuut] -> [Sand | Tikapuut Pelaaja]
 [ToMove | TopCheckRock1] -> [Pelaaja | Rock1]
 [ToMove | TopCheckRock2] -> [Pelaaja | Rock2]
 [ToMove | TopCheckSand] -> [Pelaaja | Sand]
 [ToMove] -> []
 
+
+
 (Pelaaja painovoima)
-down [player | Air] -> [| PlayerTemp]
+down [player no climbable| Air] -> [| PlayerTemp]
 late [PlayerTemp] -> [player]
 
-(TNT putoaa pelaajan paalle ja painvastoin)
-down [player | Object] -> [| PlayerTemp2 Object]
+(TNT putoaa pelaajan paalle ja painvastoin, Kannettava TNT Painovoima)
+down [player no Tikapuut | Object] -> [| PlayerTemp2 Object]
 late [PlayerTemp2] -> [player]
 
 down [Object | Pelaaja] -> [Air | TempDynamiitti Pelaaja]
 late [TempDynamiitti] -> [Object]
+
+down [Object no climbable | Air] -> [ | TempObject]
+late [TempObject] -> [Object]
+
+(sinko putoaa pelaajan paalle ja painvastoin, Kannettava sinko Painovoima)
+down [player no Tikapuut | RocketLauncher] -> [| PlayerTemp2 RocketLauncher]
+late [PlayerTemp2] -> [player]
+
+down [RocketLauncher | Pelaaja] -> [Air | TempSinko Pelaaja]
+late [TempSinko] -> [RocketLauncher]
+
+down [RocketLauncher | Air] -> [ | TempObject]
+late [TempObject] -> [RocketLauncher]
 
 (Painovoima Rajahtavat, rajahtava TNT putoaa ilmassa)
 
@@ -371,9 +528,17 @@ down [ToMove | SideCheck] -> [Sand | Sand]
 
 (Säädä ilman kanssa)
 late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
+late [Tikapuut Air] -> [Tikapuut]
+late [Vine Air] -> [Vine]
 
 (Tnt-kanto)
-[ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
+up [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
+horizontal [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
+
+
+(Sinko-kanto)
+up [ > Pelaaja RocketLauncher] -> [ > Pelaaja > RocketLauncher]
+horizontal [ > Pelaaja RocketLauncher] -> [ > Pelaaja > RocketLauncher]
 
 (Tnt-jättö)
 right [action Pelaaja Dynamiitti | Air] -> [Pelaaja | Tnt]
@@ -404,11 +569,31 @@ late[Tnt3] -> [Tnt4]
 late[Tnt2] -> [Tnt3] 
 late[Tnt] -> [Tnt2] 
 
+(ammu singolla)
+right [action Pelaaja RocketLauncher |] -> [Pelaaja RocketLauncher|Missile]
+
+right [Missile|Air] -> [Air|Missile]
+right[Missile|destroyable] -> [Air|Tnt11]
+
+
+(Koira jahtaa pelaajaa)
+horizontal [Pelaaja | ... | Koira] -> [Pelaaja | ... | < Koira]
+
+(Koira osuessa kissaan kissa kuolee)
+[Pelaaja | < Koira] -> restart
+
+
+(Silman hitbox-restarttaa pelin)
+late [Pelaaja EyeHitBox] -> restart
+
+()
+
+
 ==============
 WINCONDITIONS
 ==============
 
-all Player on Goal
+some Player on Goal
 
 =======
 LEVELS
@@ -416,23 +601,23 @@ LEVELS
 (Sijoita alla olevaan karttaan luomasi objektit)
 
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
-rere......................................r
-rr............................s...........e
-e.........................................r
-r.............................s...........r
-r.d.......................................r
-rree.t........................s...........e
-r.rrrt....................................r
-r....t........................s...........r
-r....t....................................r
-r....t........................s...........r
-r....t....................................r
-r....t........................s...........r
-rp...t....................................r
-rrrrrrrrrrrrerrerrrreerrrrrre.s..eerrrrrrrr
-rrrrrrerrerrrrrerrrrrrreeerree.r.rerrrrrrrr
-rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
-rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
+rereerrreerr.........ee.....vvvv..........r
+rr.....eeree..........er....v..vvv........e
+e........rre..........ere.......vv........r
+r.........re...........er.......ereeerer.tr
+r.d.......eee.........eee.......rereereeete
+rree.t....rrer.m......ee....ln....rereeerte
+r.rrrt....rerrree..........hcxh.......h..tr
+r....t.....eeeeeeereerre...hreeh......h..tr
+r....t.....eeeeeeerresrereerereeeerererretr
+r....t......rerereesssrereerereeeerererretr
+r....t......v.errrrssseeeereereererv.....tr
+r....t......v..v.eereeerre...vvvv.vv.....tr
+r....t....erv..v.v.eree.....vvv.vvvvv....tr
+rp...t...errrr...v...ee.....v....v..v....tr
+rrrrrrrrerereererrrreerrrre.v..........vktr
+rrrrrrerrererrrerrrrrrreeerreeerererrrrvrrr
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrdvrrr
 
 
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
@@ -484,5 +669,20 @@ rrr...rrrrrrrt..........................................t..............rrrrrrrrr
 rrrr..rrrrrrrt..........................................t..rrrrrrrrrrrrrrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
+r...................sssssssssssssss.......................r
+r................ssssssssssssssssssss.....................r
+r................sssssssssssssssssssss....................r
+r...............ssssssssssssssssssssss....................r
+r..............ssssssssssssssssssssssss...................r
+r.............ssssssssssssssssssssssssss..................r
+r............ssssssssssssssssssssssssssss.................r
+r...........sssssssssssssssssssssssssssssss...............r
+r.p......z.sssssssssssssssssssssssssssssssss..........m...r
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
 MESSAGE Voitit pelin.
