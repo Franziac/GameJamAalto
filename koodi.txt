@@ -1,5 +1,6 @@
 title Hiekka-Samin seikkailu
 author Elja, Frans ja Otto
+homepage Auta Sami pois maan alta!
 
 realtime_interval 0.3
 
@@ -327,6 +328,23 @@ green
 EyeHitBox
 darkbrown
 
+Pickaxe
+blue brown
+00...
+..0..
+..10.
+.1..0
+1...0
+
+PickaxeRock
+lightbrown lightgray white darkgray
+30101
+13100
+03330
+00131
+01003
+
+
 =======
 LEGEND
 =======
@@ -347,8 +365,11 @@ n = EyeTR
 c = EyeBL
 x = EyeBR
 z = RocketLauncher
+q = Pickaxe
+i = PickaxeRock
 
-destroyable = Rock1 or Sand or Air or Tnt or Pelaaja or EyeTL or EyeTR or EyeBL or EyeBR or  EyeHitBox or Tikapuut or Fireball or Tnt or Tnt2 or Tnt3 or Tnt4 or Tnt5 or Tnt6 or Tnt7 or Tnt8 or Tnt9 or Tnt10 or Tnt11 or Tnt12
+(destroyable tuhoutuu tnt vieressä, huom Rock2 ei tuhoudu)
+destroyable = Rock1 or Sand or Air or Tnt or Pelaaja or EyeTL or EyeTR or EyeBL or EyeBR or  EyeHitBox or Tikapuut or Fireball or Tnt2 or Tnt3 or Tnt4 or Tnt5 or Tnt6 or Tnt7 or Tnt8 or Tnt9 or Tnt10 or Tnt11 or Tnt12 or Vine or Koira
 Object = Dynamiitti 
 Player = Pelaaja
 Climbable = Tikapuut or Vine
@@ -365,10 +386,10 @@ COLLISIONLAYERS
 (Tässä on pakko asettaa "törmäystasot" KAIKILLE objekteille)
 Background
 Air
-Dynamiitti
+Dynamiitti, Pickaxe
 Tikapuut, Gen, Vine
 Goal
-Rock1, Rock2, Pelaaja, Sand, Koira, EyeTL, EyeTR, EyeBL, EyeBR
+Rock1, Rock2, Pelaaja, PickaxeRock,Sand, Koira, EyeTL, EyeTR, EyeBL, EyeBR
 Tnt, Tnt2, Tnt3, Tnt4, Tnt5, Tnt6, Tnt7, Tnt8, Tnt9, Tnt10, Tnt11, Tnt12, Fireball
 Temp, PlayerTemp, PlayerTemp2, SideCheck, TopCheckRock1, TopCheckRock2, TempDynamiitti, TempDynamiitti2, TempDynamiitti3, TempDynamiitti4, TempDynamiitti5, TempDynamiitti6, TempDynamiitti7, TempDynamiitti8, TempDynamiitti9, TempDynamiitti10, TempDynamiitti11, TempDynamiitti12, TempDynamiitti13, TempObject
 TopCheckSand, ToMove, Spot, TopCheckRock1Dynamite, TopCheckRock2Dynamite, TopCheckSandDynamite, ToMoveDynamite, EyeHitBox,
@@ -442,7 +463,7 @@ late [PlayerTemp2] -> [player]
 down [Object | Pelaaja] -> [Air | TempDynamiitti Pelaaja]
 late [TempDynamiitti] -> [Object]
 
-down [Object | Air] -> [ | TempObject]
+down [Object no climbable | Air] -> [ | TempObject]
 late [TempObject] -> [Object]
 
 (sinko putoaa pelaajan paalle ja painvastoin, Kannettava sinko Painovoima)
@@ -510,10 +531,12 @@ down [ToMove | SideCheck] -> [Sand | Sand]
 (Säädä ilman kanssa)
 late [no Sand no Rock1 no Rock2 no Player no Dynamiitti no Tikapuut] -> [Air]
 late [Tikapuut Air] -> [Tikapuut]
+late [Vine Air] -> [Vine]
 
 (Tnt-kanto)
 up [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
 horizontal [ > Pelaaja Dynamiitti] -> [ > Pelaaja > Dynamiitti]
+
 
 (Sinko-kanto)
 up [ > Pelaaja RocketLauncher] -> [ > Pelaaja > RocketLauncher]
@@ -565,6 +588,8 @@ horizontal [Pelaaja | ... | Koira] -> [Pelaaja | ... | < Koira]
 (Silman hitbox-restarttaa pelin)
 late [Pelaaja EyeHitBox] -> restart
 
+()
+
 
 ==============
 WINCONDITIONS
@@ -578,26 +603,6 @@ LEVELS
 (Sijoita alla olevaan karttaan luomasi objektit)
 
 rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
-rereerrreerr..............................r
-rr.....eeree..............................e
-e........rre.............................tr
-r.........re.............................tr
-r.d.......eee............................tr
-rree.t....rrer.m.........................te
-r.rrrt....rerrree.............erererererrtr
-r....t.....eeeeeeereerre....lnhhhhhhhh.p.tr
-r....t.....eeeeeeerresreee..cxhhhhhhhhhe.tr
-r....t......rerereesssrereerereeeerererretr
-r....t......v.errrrssseeeereereererv.....tr
-r....t......v..v.eereeerre...vvvv.vv.....tr
-r....t....erv..v.v.eree......vv.vvvvv....tr
-r....t...errrr...v...ee......v...v..v....tr
-rrrrrrrrerereererrrreerrrre..v..........ktr
-rrrrrrerrererrrerrrrrrreeerreeerererrrrrrrr
-rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
-
-
-rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
 rere......................................r
 rr........................................e
 e.........................................r
@@ -608,7 +613,7 @@ r.rrrt....................................r
 r....t.......................s............r
 r....t......................sss...........r
 r....t.....................sssss..........r
-r....t.....................rrrssr.........r
+r....t.....................rrsssr.........r
 r....t.....................rrrrsrr........r
 rp...t.......................rrsrrr....m..r
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
@@ -616,8 +621,27 @@ rrrrrrerrerrrrrerrrrrrreeerreerrrrerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrrrrrr
 
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrggggrrrrrrrrrrrrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr........rrrrrrrrrrrrrrrrrrrrrr
+rerrrreeerrrrreeerrrerrrrrrrrrrrerrrrrrrrrr
+rereerrreerr.........ee.....vvvv..........r
+rr.....eeree..........er....v..vvv........e
+e........rre..........ere.......vv........r
+r.........re...........er.......ereeerer.tr
+r.d.......eee.........eee.......rereereeete
+rree.t....rrer.m......ee....ln....rereeerte
+r.rrrt....rerrree..........hcxh.......h..tr
+r....t.....eeeeeeereerre...hreeh......h..tr
+r....t.....eeeeeeerresrereerereeeerererretr
+r....t......rerereesssrereerereeeerererretr
+r....t......v.errrrssseeeereereererv.....tr
+r....t......v..v.rrrrrerre...vvvv.vv.....tr
+r....t....erv..v.v.rrrr.....vvv.vvvvv....tr
+rp...t...errrr...v...rr.....v....v..v....tr
+rrrrrrrrerereererrrrrrrrrre.v..........vktr
+rrrrrrerrererrrerrrrrrreeerreeerererrrrvrrr
+rrrrrrrrrrrrerrerrrreerrrrrrerrrreerrrdvrrr
+
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrggggrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr........rrrrrrrrrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrrrrrrrrrrrrgrrrrrrrrrrrrrrrrrrrrrrrrrrrr............rrrrrrrrrrrrrrrrrrrr
 rrrrrrr......................rrrrrrrrrrrr...........rrr..ssss.....................rrrrr
 rrrr.........................rrrrrrrrr...............rrssssssss.....................rrr
@@ -625,15 +649,15 @@ rr...........................rrrrrrrrr................r.sssssss.................
 r.............................rrrrrrrr.t..d..........rrrsssssssss....................rr
 rr.............................rrrrrr..trrreerereeee...rrr.sssseeeeeeee..............rr
 rrr................r.............rrrr..treeereeeeeeeee....ssssseeee..................rr
-r.......p.......rrrr...................terreeeeeee...eeeessssseeee...................rr
-rrrrrrrrrrrrrrrrrrrrrrrr...............teereeeee......eeeeeeeee......................rr
-rrrrrrrrrrr..rrrrrrrrrrrrrrrrrrrrrr....trereeee.........t..eeee.....................rrr
+r.......p.......rrrr...................terreeeeeee...rrrrsssssrree...................rr
+rrrrrrrrrrrrrrrrrrrrrrrr...............teereeeee......rrrrrrrrr......................rr
+rrrrrrrrrrr..rrrrrrrrrrrrrrrrrrrrrr....trereeee.........t..rrrr.....................rrr
 rr...................rrrrrrrrrrrr......trreeeee.........t............................rr
-rr.........................rrrrr.......trreee...........teeeee.......................rr
-r...........................rrr.....rrrrree.............t..eeee......................rr
-rr...........................rrr...rrreeeee.............t....eee....................rrr
-rr............................rrr.rreeeee...............teeeeee.......t.......m...rrrrr
-r..............................rrrreee..................t.............trrrrrrrrrrrrrrrr
+rr.........................rrrrr.......trreee...........trrrrr.......................rr
+r...........................rrr.....rrrrree.............t..rrrr......................rr
+rr...........................rrr...rrreeeee.............t....rrr....................rrr
+rr............................rrr.rrrreee...............trrrrrr.......t.......m...rrrrr
+r..............................rrrrrre..................t.............trrrrrrrrrrrrrrrr
 rr......................................................t.............t....rrrrrrrrrrrr
 rr......................................................t.............t.........rrrrrrr
 r.......................................................t.............t............rrrr
@@ -642,8 +666,8 @@ rr......................................................t.......................
 r.......................................................t...........................rrr
 r.....dddddd.t..........................................t...........................rrr
 rr....rrrrrrrt..........................................t......................rrrrrrrr
-rrr...rrrrrrrt..........................................t..............rrrrrrrrrrrrrrrr
-rrrr..rrrrrrrt..........................................t..rrrrrrrrrrrrrrrrrrrrrrrrrrrr
+rrr...rrrrrrrt..........................................trrrrrrrrrrr...rrrrrrrrrrrrrrrr
+rrrr..rrrrrrrt..........................................t.............rrrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 
 rrrrrrrrrrrrrrrrrrrrsssssssssssssssssrrrrrrrrrrrrrrrrrrrrrr
@@ -662,4 +686,4 @@ r...........sssssssssssssssssssssssssssssss...............r
 r.p......z.sssssssssssssssssssssssssssssssss..........m...r
 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
-MESSAGE Voitit pelin.
+MESSAGE Hiekka-Sami pääsi maan pinnalle. Hyvää työtä!
